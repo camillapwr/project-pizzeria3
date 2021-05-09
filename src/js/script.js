@@ -61,9 +61,10 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
 
-      console.log('new Product:', thisProduct);
+      //console.log('new Product:', thisProduct);
     }
     
     renderInMenu(){
@@ -78,20 +79,23 @@
       const thisProduct = this;
     
       thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-      console.log(thisProduct.accordionTrigger);
+      //console.log(thisProduct.accordionTrigger);
       thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
-      console.log(thisProduct.form);
+      //console.log(thisProduct.form);
 
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       console.log(thisProduct.formInputs);
       //ciezko mi zrozumiec ten selector, w console.log wyswietla sie NodeList?nie wiem co to jest
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
-      console.log(thisProduct.cartButton);
+      //console.log(thisProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      console.log(thisProduct.priceElem);
+      //console.log(thisProduct.priceElem);
 
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-      console.log(thisProduct.imageWrapper);
+      //console.log(thisProduct.imageWrapper);
+
+      thisProduct.amountWidget = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+      console.log(thisProduct.amountWidget);
     }
   
     initAccordion(){
@@ -102,8 +106,8 @@
       thisProduct.accordionTrigger.addEventListener('click', function(event) {
         event.preventDefault();
         const activeProduct = document.querySelector(select.all.menuProductsActive);
-        console.log(this);
-        console.log(thisProduct);
+        //console.log(this);
+        //console.log(thisProduct);
 
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if (activeProduct !== null && activeProduct !== thisProduct.element){
@@ -115,7 +119,7 @@
 
     initOrderForm(){
       const thisProduct = this;
-      console.log('initOrderForm'); //informujący o nazwie metody w której się znajduje??
+      //console.log('initOrderForm'); //informujący o nazwie metody w której się znajduje??
     
       thisProduct.form.addEventListener('submit', function(event){
         event.preventDefault();
@@ -134,30 +138,35 @@
       });
     }
 
+    initAmountWidget(){
+      const thisProduct = this;
+      thisProduct.amountWidget = new AmountWidget (thisProduct.amountWidgetElem);
+    }
+
     processOrder() {
       const thisProduct = this;
 
-      console.log('processOrder'); //pokazuje sie w konsoli kiedy klikne add to cart
+      //console.log('processOrder'); //pokazuje sie w konsoli kiedy klikne add to cart
     
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      //console.log('formData', formData);
     
       let price = thisProduct.data.price;
     
       for(let paramId in thisProduct.data.params) {
         
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
-        console.log(paramId);
-        console.log (param);
+        //console.log(paramId, param);
+        //console.log(paramId);
+        //console.log (param);
     
         for(let optionId in param.options) {// nazwa stałej.klucz obiektu ??
 
           const option = param.options[optionId];
         
-          console.log(option);
-          console.log(param.options);
-          console.log(optionId);
+          //console.log(option);
+          //console.log(param.options);
+          //console.log(optionId);
           
           // check if there is param with a name of paramId in formData and if it includes optionId
           if(formData[paramId] && formData[paramId].includes(optionId)) {
@@ -170,7 +179,7 @@
             }
           }
           const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId +'-' + optionId);
-          console.log(optionImage);
+          //console.log(optionImage);
 
           if(optionImage){ 
             if(formData[paramId] && formData[paramId].includes(optionId)){
@@ -185,12 +194,26 @@
         thisProduct.priceElem.innerHTML = price;
       }
     }
+
+    
+  }
+
+  class AmountWidget{
+    constructor(element){
+      const thisWidget = this;
+
+      //thisWidget.element = element;
+      
+      console.log('AmountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
+
+    }
   }
 
   const app = {
     initMenu: function(){
       const thisApp = this;
-      console.log('thisApp.data:', thisApp.data);
+      //console.log('thisApp.data:', thisApp.data);
       for(let productData in thisApp.data.products){
         new Product(productData, thisApp.data.products[productData]);
       }
@@ -202,11 +225,11 @@
     },
     init: function(){
       const thisApp = this;
-      console.log('*** App starting ***');
-      console.log('thisApp:', thisApp);
-      console.log('classNames:', classNames);
-      console.log('settings:', settings);
-      console.log('templates:', templates);
+      //console.log('*** App starting ***');
+      //console.log('thisApp:', thisApp);
+      //console.log('classNames:', classNames);
+      //console.log('settings:', settings);
+      //console.log('templates:', templates);
 
       thisApp.initData();
       thisApp.initMenu();
