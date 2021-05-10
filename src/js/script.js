@@ -100,9 +100,6 @@
   
     initAccordion(){
       const thisProduct = this;
-      
-      /* find the clickable trigger (the element that should react to clicking)
-      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable) START: add event listener to clickable trigger on event click */
       thisProduct.accordionTrigger.addEventListener('click', function(event) {
         event.preventDefault();
         const activeProduct = document.querySelector(select.all.menuProductsActive);
@@ -138,10 +135,7 @@
       });
     }
 
-    initAmountWidget(){
-      const thisProduct = this;
-      thisProduct.amountWidget = new AmountWidget (thisProduct.amountWidgetElem);
-    }
+    
 
     processOrder() {
       const thisProduct = this;
@@ -189,20 +183,27 @@
               optionImage.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
-        }
-        // update calculated price in the HTML
-        thisProduct.priceElem.innerHTML = price;
+        }  
       }
+      //multiply price by amount
+      price *= thisProduct.amountWidget.value;
+      // update calculated price in the HTML
+      thisProduct.priceElem.innerHTML = price;
     }
 
-    
+    initAmountWidget(){
+      const thisProduct = this;
+      thisProduct.amountWidget = new AmountWidget (thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisProduct.processOrder();
+      });
+    }
+
   }
 
   class AmountWidget{
     constructor(element){
       const thisWidget = this;
-
-      //thisWidget.element = element;
       
       console.log('AmountWidget:', thisWidget);
       console.log('constructor arguments:', element);
@@ -225,9 +226,12 @@
       const thisWidget = this;
       const newValue = parseInt(value);
 
+      thisWidget.value = settings.amountWidget.defaultValue;
+
       /* TODO Add validation */
       if(thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
         thisWidget.value = newValue;
+        thisWidget.announce();
       }
       thisWidget.input.value = thisWidget.value;
     }
@@ -237,15 +241,22 @@
 
       thisWidget.input.addEventListener('change', function(){
         thisWidget.setValue(thisWidget.input.value);
+        
       });
       thisWidget.linkDecrease.addEventListener('click', function(event){
-        event.preventDefault;
+        event.preventDefault();
         thisWidget.setValue(thisWidget.value -1);
       });
       thisWidget.linkIncrease.addEventListener('click', function(event){
-        event.preventDefault;
+        event.preventDefault();
         thisWidget.setValue(thisWidget.value +1);
       });
+    }
+    announce(){
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
     }
 
   }
