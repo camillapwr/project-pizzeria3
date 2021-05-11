@@ -6,6 +6,7 @@
   const select = {
     templateOf: {
       menuProduct: '#template-menu-product',
+      cartProduct: '#template-cart-product', // CODE ADDED
     },
     containerOf: {
       menu: '#product-list',
@@ -14,7 +15,7 @@
     all: {
       menuProducts: '#product-list > .product',
       menuProductsActive: '#product-list > .product.active',
-      formInputs: 'input, select',//z tego powstaje ten selector select.all.formInputs, skad pochodzą te wartosci 'input, select'
+      formInputs: 'input, select',
     },
     menuProduct: {
       clickable: '.product__header',
@@ -26,31 +27,65 @@
     },
     widgets: {
       amount: {
-        input: 'input[name="amount"]',
+        input: 'input.amount', // CODE CHANGED
         linkDecrease: 'a[href="#less"]',
         linkIncrease: 'a[href="#more"]',
       },
     },
+    // CODE ADDED START
+    cart: {
+      productList: '.cart__order-summary',
+      toggleTrigger: '.cart__summary',
+      totalNumber: `.cart__total-number`,
+      totalPrice: '.cart__total-price strong, .cart__order-total .cart__order-price-sum strong',
+      subtotalPrice: '.cart__order-subtotal .cart__order-price-sum strong',
+      deliveryFee: '.cart__order-delivery .cart__order-price-sum strong',
+      form: '.cart__order',
+      formSubmit: '.cart__order [type="submit"]',
+      phone: '[name="phone"]',
+      address: '[name="address"]',
+    },
+    cartProduct: {
+      amountWidget: '.widget-amount',
+      price: '.cart__product-price',
+      edit: '[href="#edit"]',
+      remove: '[href="#remove"]',
+    },
+    // CODE ADDED END
   };
-
+  
   const classNames = {
     menuProduct: {
       wrapperActive: 'active',
       imageVisible: 'active',
     },
+    // CODE ADDED START
+    cart: {
+      wrapperActive: 'active',
+    },
+    // CODE ADDED END
   };
-
+  
   const settings = {
     amountWidget: {
       defaultValue: 1,
       defaultMin: 1,
       defaultMax: 9,
-    }
+    }, // CODE CHANGED
+    // CODE ADDED START
+    cart: {
+      defaultDeliveryFee: 20,
+    },
+    // CODE ADDED END
   };
-
+  
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
+    // CODE ADDED START
+    cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
+    // CODE ADDED END
   };
+
   class Product{
     constructor(id, data){
       const thisProduct = this;
@@ -100,9 +135,6 @@
   
     initAccordion(){
       const thisProduct = this;
-      
-      /* find the clickable trigger (the element that should react to clicking)
-      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable) START: add event listener to clickable trigger on event click */
       thisProduct.accordionTrigger.addEventListener('click', function(event) {
         event.preventDefault();
         const activeProduct = document.querySelector(select.all.menuProductsActive);
@@ -138,13 +170,7 @@
       });
     }
 
-    initAmountWidget(){
-      const thisProduct = this;
-      thisProduct.amountWidget = new AmountWidget (thisProduct.amountWidgetElem);
-      thisProduct.amountWidgetElem.addEventListener('updated', function(){
-        thisProduct.processOrder();
-      });
-    }
+    
 
     processOrder() {
       const thisProduct = this;
@@ -192,12 +218,20 @@
               optionImage.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
-        }
-        //multiply price by amount
-        price *= thisProduct.amountWidget.value;
-        // update calculated price in the HTML
-        thisProduct.priceElem.innerHTML = price;
+        }  
       }
+      //multiply price by amount
+      price *= thisProduct.amountWidget.value;
+      // update calculated price in the HTML
+      thisProduct.priceElem.innerHTML = price;
+    }
+
+    initAmountWidget(){
+      const thisProduct = this;
+      thisProduct.amountWidget = new AmountWidget (thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisProduct.processOrder();
+      });
     }
 
   }
@@ -205,9 +239,9 @@
   class AmountWidget{
     constructor(element){
       const thisWidget = this;
-
-      //thisWidget.element = element;
       
+      thisWidget.value = settings.amountWidget.defaultValue;
+
       console.log('AmountWidget:', thisWidget);
       console.log('constructor arguments:', element);
       //wywolanie metod
@@ -229,7 +263,7 @@
       const thisWidget = this;
       const newValue = parseInt(value);
 
-      thisWidget.value = settings.amountWidget.defaultValue;
+      ///wyrzuciłam thisWidget.value = settings.amountWidget.defaultValue;
 
       /* TODO Add validation */
       if(thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
