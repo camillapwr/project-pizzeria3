@@ -119,8 +119,8 @@
       //console.log(thisProduct.form);
 
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
-      console.log(thisProduct.formInputs);
-      //ciezko mi zrozumiec ten selector, w console.log wyswietla sie NodeList?nie wiem co to jest
+      //console.log(thisProduct.formInputs);
+      //w console.log wyswietla sie NodeList?nie wiem co to jest
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       //console.log(thisProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
@@ -130,7 +130,7 @@
       //console.log(thisProduct.imageWrapper);
 
       thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
-      console.log(thisProduct.amountWidget);
+      //console.log(thisProduct.amountWidget);
     }
   
     initAccordion(){
@@ -286,8 +286,8 @@
       
       thisWidget.value = settings.amountWidget.defaultValue;
 
-      console.log('AmountWidget:', thisWidget);
-      console.log('constructor arguments:', element);
+      //console.log('AmountWidget:', thisWidget);
+      //console.log('constructor arguments:', element);
       //wywolanie metod
       thisWidget.getElements(element);
       thisWidget.setValue(thisWidget.input.value);
@@ -348,7 +348,7 @@
       thisCart.products = [];
       thisCart.getElements(element);
       thisCart.initActions();
-      console.log('new Cart', thisCart);
+      // console.log('new Cart', thisCart);
     }
     getElements(element){
       const thisCart = this;
@@ -369,7 +369,27 @@
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
       thisCart.dom.productList.appendChild(generatedDOM);
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
+      thisCart.update();
       console.log('thisCart.products', thisCart.products); 
+    }
+
+    update(){
+      const thisCart = this;
+      const deliveryFee = settings.cart.defaultDeliveryFee; //zmienie z const na właściwosc zeby było spójniej
+      let totalNumber = 0; //zmienie z let na właściwosc zeby było spójniej
+      thisCart.subTotalPrice = 0; //to juz nie moze byc zapis w stałej, bo będzie te wykorzystywane poza tą metodą
+
+      for(let product of thisCart.products){
+        totalNumber = totalNumber + product.amount;
+        thisCart.subTotalPrice = thisCart.subTotalPrice + product.price;
+      }
+      if (totalNumber !== 0){
+        thisCart.totalPrice = thisCart.subTotalPrice + deliveryFee;
+      } if (totalNumber == 0){
+        thisCart.totalPrice = 0;
+      }
+      console.log(deliveryFee, totalNumber);
+      console.log(thisCart.subTotalPrice, thisCart.totalPrice);
     }
   }
 
