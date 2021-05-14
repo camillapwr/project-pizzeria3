@@ -375,20 +375,20 @@
 
     update(){
       const thisCart = this;
-      const deliveryFee = settings.cart.defaultDeliveryFee; //zmienie z const na właściwosc zeby było spójniej
-      let totalNumber = 0; //zmienie z let na właściwosc zeby było spójniej
-      thisCart.subTotalPrice = 0; //to juz nie moze byc zapis w stałej, bo będzie te wykorzystywane poza tą metodą
+      thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
+      thisCart.totalNumber = 0;
+      thisCart.subTotalPrice = 0;
 
       for(let product of thisCart.products){
-        totalNumber = totalNumber + product.amount;
+        thisCart.totalNumber = thisCart.totalNumber + product.amount;
         thisCart.subTotalPrice = thisCart.subTotalPrice + product.price;
       }
-      if (totalNumber !== 0){
-        thisCart.totalPrice = thisCart.subTotalPrice + deliveryFee;
-      } if (totalNumber == 0){
+      if (thisCart.totalNumber !== 0){
+        thisCart.totalPrice = thisCart.subTotalPrice + thisCart.deliveryFee;
+      } if (thisCart.totalNumber == 0){
         thisCart.totalPrice = 0;
       }
-      console.log(deliveryFee, totalNumber);
+      console.log(thisCart.deliveryFee, thisCart.totalNumber);
       console.log(thisCart.subTotalPrice, thisCart.totalPrice);
     }
   }
