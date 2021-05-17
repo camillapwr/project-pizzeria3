@@ -367,6 +367,9 @@
       thisCart.dom.subTotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);//referencja do elementu pokazującego cene końcową bez delivery
       thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);//referencja do elementów pokazujących cene końcową
       thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);//referencja do elementu pokazującego liczbe sztuk
+      thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);//referencja do elementu formularza
+      thisCart.dom.formPhone = thisCart.dom.form.querySelector(select.cart.phone);//referencja do inputa telefonu formularza
+      thisCart.dom.formAddress = thisCart.dom.form.querySelector(select.cart.address);//referencja do inputa adresu w formularzu
     }
     initActions(){
       const thisCart = this;
@@ -379,6 +382,10 @@
       });
       thisCart.dom.productList.addEventListener('remove', function(event){
         thisCart.remove(event.detail.cartProduct);
+      });
+      thisCart.dom.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisCart.sendOrder();
       });
     }
     add(menuProduct){
@@ -424,6 +431,20 @@
       cartProduct.dom.wrapper.remove();
 
       thisCart.update();
+    }
+
+    sendOrder(){
+      const thisCart = this;
+      const url = settings.db.url + '/' + settings.db.orders;
+      const payload ={
+        address: thisCart.dom.formAddress,
+        phone: thisCart.dom.formPhone,
+        totalPrice: thisCart.totalPrice,
+        subTotalPrice: thisCart.subTotalPrice,
+        totalNumber: thisCart.totalNumber,
+        deliveryFee: thisCart.deliveryFee,
+        products: [],
+      };
 
     }
   }
