@@ -388,6 +388,7 @@
         thisCart.sendOrder();
       });
     }
+
     add(menuProduct){
       const thisCart = this;
       const generatedHTML = templates.cartProduct(menuProduct);
@@ -436,9 +437,9 @@
     sendOrder(){
       const thisCart = this;
       const url = settings.db.url + '/' + settings.db.orders;
-      const payload ={
-        address: thisCart.dom.formAddress,
-        phone: thisCart.dom.formPhone,
+      const payload = {
+        address: thisCart.dom.formAddress.value,
+        phone: thisCart.dom.formPhone.value,
         totalPrice: thisCart.totalPrice,
         subTotalPrice: thisCart.subTotalPrice,
         totalNumber: thisCart.totalNumber,
@@ -446,6 +447,24 @@
         products: [],
       };
 
+      for(let prod of thisCart.products) {
+        payload.products.push(prod.getData());
+      }
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      };
+      
+      fetch(url, options)
+        .then(function(response){
+          return response.json();
+
+        }).then(function(parsedResponse){
+          console.log('parsedResponse', parsedResponse);
+        });
     }
   }
 
@@ -506,6 +525,18 @@
         thisCartProduct.remove();
       });
     }
+    getData(){
+      const thisCartProduct = this;
+      const getProducts = {
+        id: thisCartProduct.id,
+        name: thisCartProduct.name,
+        amount: thisCartProduct.amount,
+        priceSingle: thisCartProduct.priceSingle,
+        price: thisCartProduct.price,
+        params: thisCartProduct.params,
+      };
+      return getProducts;
+    }
 
   }
 
@@ -547,14 +578,9 @@
 
     init: function(){
       const thisApp = this;
-      //console.log('*** App starting ***');
-      //console.log('thisApp:', thisApp);
-      //console.log('classNames:', classNames);
-      //console.log('settings:', settings);
-      //console.log('templates:', templates);
-
+      
       thisApp.initData();
-      thisApp.initMenu();
+      //thisApp.initMenu();//zapomnialam wyrzucic
       thisApp.initCart();
     },
   };
