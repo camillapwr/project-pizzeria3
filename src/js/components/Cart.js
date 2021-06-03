@@ -1,13 +1,12 @@
-import {settings, select, templates, classNames} from './settings.js';
-import utils from './utils.js';
-import CartProduct from './components/CartProduct.js';
+import {settings, select, templates, classNames} from '../settings.js';
+import utils from '../utils.js';
+import CartProduct from './CartProduct.js';
 class Cart{
   constructor(element){
     const thisCart = this;
     thisCart.products = [];
     thisCart.getElements(element);
     thisCart.initActions();
-    // console.log('new Cart', thisCart);
   }
   getElements(element){
     const thisCart = this;

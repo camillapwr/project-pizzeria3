@@ -1,11 +1,10 @@
-import {settings, select} from './setting.js';
+import {settings, select} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 
 const app = {
   initMenu: function(){
     const thisApp = this;
-    //console.log('thisApp.data:', thisApp.data);
     for(let productData in thisApp.data.products){
       new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
     }

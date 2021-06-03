@@ -1,4 +1,4 @@
-import {select, settings} from './settings.js';
+import {select, settings} from '../settings.js';
 class AmountWidget{
   constructor(element){
     const thisWidget = this;
@@ -22,7 +22,6 @@ class AmountWidget{
     const thisWidget = this;
     const newValue = parseInt(value);
 
-    ///wyrzuciłam thisWidget.value = settings.amountWidget.defaultValue;
     if(thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
       thisWidget.value = newValue;
       thisWidget.announce();
