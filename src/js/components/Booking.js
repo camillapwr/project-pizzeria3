@@ -19,13 +19,13 @@ class Booking{
 
     thisBooking.dom.hoursAmount = thisBooking.dom.wrapper.querySelector(select.booking.hoursAmount);
   }
-  initWidget(){
+  initWidgets(){
     const thisBooking = this;
     thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
     thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
 
-    thisBooking.dom.peopleAmount.addEventListener('click', function(){});
-    thisBooking.dom.hoursAmount.addEventListener ('click', function(){});
+    thisBooking.dom.peopleAmount.addEventListener('updated', function(){});
+    thisBooking.dom.hoursAmount.addEventListener ('updated', function(){});
   }
 }
 

@@ -81,24 +81,22 @@ const app = {
   initData: function(){
     const thisApp = this;
     thisApp.data = {};
-    const url = settings.db.url + '/' + settings.db.products;
-
+    const url = settings.db.url + '/' + settings.db.product;
     fetch(url)
       .then(function(rawResponse){
         return rawResponse.json();
       })
       .then(function(parsedResponse){
-        console.log('parsedResponse', parsedResponse);
         /* save parsedResponse as thisApp.data.products */
         thisApp.data.products = parsedResponse;
         thisApp.initMenu();
       });
-    console.log('thisApp.data', JSON.stringify(thisApp.data));
+    
   },
   initBooking: function(){
     const thisApp = this;
     const bookingContainer = document.querySelector(select.containerOf.booking);
-    thisApp.booking = new Booking(bookingContainer);
+    thisApp.booking = new Booking (bookingContainer);
   },
   init: function(){
     const thisApp = this;
