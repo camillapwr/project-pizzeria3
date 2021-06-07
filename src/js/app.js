@@ -1,6 +1,7 @@
 import {settings, select, classNames} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
+import Booking from './components/Booking.js';
 
 const app = {
   initPages: function(){
@@ -94,12 +95,18 @@ const app = {
       });
     console.log('thisApp.data', JSON.stringify(thisApp.data));
   },
+  initBooking: function(){
+    const thisApp = this;
+    const bookingContainer = document.querySelector(select.containerOf.booking);
+    thisApp.booking = new Booking(bookingContainer);
+  },
   init: function(){
     const thisApp = this;
     thisApp.initPages();
     thisApp.initData();
     //thisApp.initMenu();//zapomnialam wyrzucic i był błąd
     thisApp.initCart();
+    thisApp.initBooking();
   },
 };
 
