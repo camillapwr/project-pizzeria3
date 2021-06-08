@@ -81,7 +81,7 @@ const app = {
   initData: function(){
     const thisApp = this;
     thisApp.data = {};
-    const url = settings.db.url + '/' + settings.db.product;
+    const url = settings.db.url + '/' + settings.db.products;
     fetch(url)
       .then(function(rawResponse){
         return rawResponse.json();
